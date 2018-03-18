@@ -18,5 +18,16 @@
     <ClCompile Include="CS552 Final Project.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StripeGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StripeGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
