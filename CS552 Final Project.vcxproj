@@ -155,8 +155,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Edge.h" />
+    <ClInclude Include="Face.h" />
     <ClInclude Include="StripeGenerator.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
