@@ -5,6 +5,12 @@
 class Edge
 {
 public:
-	std::vector<double> opposite_angles;
-	std::vector<Vertex*> vertices;
+	int index;
+	Vertex *verts[2];
+	int ntris;
+	Triangle **tris;
+	double length;
+
+	Vertex *middle;
+	double opposite_angles[2];
 };
