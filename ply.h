@@ -67,7 +67,7 @@ extern "C" {
 
 typedef struct PlyProperty {    /* description of a property */
 
-  char *name;                   /* property name */
+  const char *name;                   /* property name */
   int external_type;            /* file's data type */
   int internal_type;            /* program's data type */
   int offset;                   /* offset bytes of prop in a struct */
@@ -80,7 +80,7 @@ typedef struct PlyProperty {    /* description of a property */
 } PlyProperty;
 
 typedef struct PlyElement {     /* description of an element */
-  char *name;                   /* element name */
+  const char *name;                   /* element name */
   int num;                      /* number of elements in this object */
   int size;                     /* size of element (bytes) or -1 if variable */
   int nprops;                   /* number of properties for this element */
@@ -156,7 +156,7 @@ typedef struct PlyFile {        /* description of PLY file */
 /*
 extern char *my_alloc();
 */
-#define myalloc(mem_size) my_alloc((mem_size), __LINE__, __FILE__)
+#define myalloc(mem_size) my_alloc((mem_size), __LINE__, (char*) __FILE__)
 
 
 /* old routines */
@@ -197,7 +197,7 @@ char **get_obj_info_ply(PlyFile *, int *);
 char **get_element_list_ply(PlyFile *, int *);
 void setup_property_ply(PlyFile *, PlyProperty *);
 void get_element_ply (PlyFile *, void *);
-char *setup_element_read_ply (PlyFile *, int, int *);
+const char *setup_element_read_ply (PlyFile *, int, int *);
 PlyOtherProp *get_other_properties_ply(PlyFile *, int);
 
 void element_count_ply(PlyFile *, char *, int);

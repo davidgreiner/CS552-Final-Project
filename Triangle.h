@@ -2,6 +2,9 @@
 
 #include <vector>
 
+#ifndef __TRIANGLE_H__
+#define __TRIANGLE_H__
+
 #include "Vertex.h"
 #include "Edge.h"
 
@@ -13,11 +16,10 @@ public:
 	Vertex *verts[3];
 	Edge *edges[3];
 
-	double angle[3];
-	float area;
-
 	icVector3 normal;
 	void *other_props;
 	double angle[3];
 	double area;
 };
+
+#endif /* __TRIANGLE_H__ */

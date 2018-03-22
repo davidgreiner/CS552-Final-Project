@@ -28,9 +28,9 @@ Surface::Surface(FILE *file)
 	for (i = 0; i < in_ply->num_elem_types; i++) {
 
 		/* prepare to read the i'th list of elements */
-		elem_name = setup_element_read_ply(in_ply, i, &elem_count);
+		elem_name = (char*)setup_element_read_ply(in_ply, i, &elem_count);
 
-		if (equal_strings("vertex", elem_name)) {
+		if (equal_strings((char*)"vertex", elem_name)) {
 
 			/* create a vertex list to hold all the vertices */
 			max_verts = elem_count;
@@ -53,7 +53,7 @@ Surface::Surface(FILE *file)
 				vertices[j]->other_props = vert.other_props;
 			}
 		}
-		else if (equal_strings("face", elem_name)) {
+		else if (equal_strings((char*)"face", elem_name)) {
 
 			/* create a list to hold all the face elements */
 			max_tris = elem_count;
@@ -727,7 +727,7 @@ void Surface::calc_edge_length()
 	int i;
 	icVector3 v1, v2;
 
-	for (i = 0; i<egdes.size(); i++) {
+	for (i = 0; i<edges.size(); i++) {
 		v1.set(edges[i]->verts[0]->x, edges[i]->verts[0]->y, edges[i]->verts[0]->z);
 		v2.set(edges[i]->verts[1]->x, edges[i]->verts[1]->y, edges[i]->verts[1]->z);
 		edges[i]->length = length(v1 - v2);
@@ -768,7 +768,7 @@ void Surface::calc_face_normals_and_area()
 		orientation = 0;
 	else {
 		orientation = 1;
-		for (i = 0; i<ntris; i++)
+		for (i = 0; i<triangles.size(); i++)
 			triangles[i]->normal *= -1.0;
 	}
 }
@@ -783,7 +783,7 @@ void Surface::calc_corner_table()
 
 	int ncorners = 0;
 
-	for (int i = 0; i < triangles.size; i++) {
+	for (int i = 0; i < triangles.size(); i++) {
 		for (int k = 0; k < 3; k++) {
 			Vertex* v0 = triangles[i]->verts[k];
 			Vertex* v1 = triangles[i]->verts[(k + 1) % 3];

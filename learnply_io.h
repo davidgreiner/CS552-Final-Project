@@ -20,7 +20,7 @@ typedef struct Face_io {
   void *other_props;       /* other properties */
 } Face_io;
 
-char *elem_names[] = { /* list of the kinds of elements in the user's object */
+const char *elem_names[] = { /* list of the kinds of elements in the user's object */
   "vertex", "face"
 };
 

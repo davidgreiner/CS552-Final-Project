@@ -1,6 +1,9 @@
 #pragma once
 
-#include "Triangle.h"
+#ifndef __VERTEX_H__
+#define __VERTEX_H__
+
+class Triangle;
 
 class Vertex {
 public:
@@ -8,7 +11,7 @@ public:
 	int index;
 
 	int ntris;
-	Triangle** tris;
+	Triangle **tris;
 	int max_tris;
 
 	icVector3 normal;
@@ -17,3 +20,4 @@ public:
 public:
 	Vertex(double xx, double yy, double zz) { x = xx; y = yy; z = zz;}
 };
+#endif /* __VERTEX_H__ */

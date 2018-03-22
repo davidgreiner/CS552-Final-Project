@@ -51,12 +51,12 @@ WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 
 
-char *type_names[] = {  /* names of scalar types */
+const char *type_names[] = {  /* names of scalar types */
 "invalid",
 "int8", "int16", "int32", "uint8", "uint16", "uint32", "float32", "float64",
 };
 
-char *old_type_names[] = {  /* old names of types for backward compatability */
+const char *old_type_names[] = {  /* old names of types for backward compatability */
 "invalid",
 "char", "short", "int", "uchar", "ushort", "uint", "float", "double",
 };
@@ -651,36 +651,36 @@ PlyFile *ply_read(FILE *fp, int *nelems, char ***elem_names)
   /* read and parse the file's header */
 
   words = get_words (plyfile->fp, &nwords, &orig_line);
-  if (!words || !equal_strings (words[0], "ply"))
+  if (!words || !equal_strings (words[0], (char*)"ply"))
     return (NULL);
 
   while (words) {
 
     /* parse words */
 
-    if (equal_strings (words[0], "format")) {
+    if (equal_strings (words[0], (char*)"format")) {
       if (nwords != 3)
         return (NULL);
-      if (equal_strings (words[1], "ascii"))
+      if (equal_strings (words[1], (char*)"ascii"))
         plyfile->file_type = PLY_ASCII;
-      else if (equal_strings (words[1], "binary_big_endian"))
+      else if (equal_strings (words[1], (char*)"binary_big_endian"))
         plyfile->file_type = PLY_BINARY_BE;
-      else if (equal_strings (words[1], "binary_little_endian"))
+      else if (equal_strings (words[1], (char*)"binary_little_endian"))
         plyfile->file_type = PLY_BINARY_LE;
       else
         return (NULL);
       plyfile->version = atof (words[2]);
       found_format = 1;
     }
-    else if (equal_strings (words[0], "element"))
+    else if (equal_strings (words[0], (char*) "element"))
       add_element (plyfile, words, nwords);
-    else if (equal_strings (words[0], "property"))
+    else if (equal_strings (words[0], (char*)"property"))
       add_property (plyfile, words, nwords);
-    else if (equal_strings (words[0], "comment"))
+    else if (equal_strings (words[0], (char*)"comment"))
       add_comment (plyfile, orig_line);
-    else if (equal_strings (words[0], "obj_info"))
+    else if (equal_strings (words[0], (char*)"obj_info"))
       add_obj_info (plyfile, orig_line);
-    else if (equal_strings (words[0], "end_header"))
+    else if (equal_strings (words[0], (char*)"end_header"))
       break;
 
     /* free up words space */
@@ -847,7 +847,7 @@ void get_element_setup_ply(
   for (i = 0; i < nprops; i++) {
 
     /* look for actual property */
-    prop = find_property (elem, prop_list[i].name, &index);
+    prop = find_property (elem, (char*)prop_list[i].name, &index);
     if (prop == NULL) {
       fprintf (stderr, "Warning:  Can't find property '%s' in element '%s'\n",
                prop_list[i].name, elem_name);
@@ -894,7 +894,7 @@ void ply_get_property(
 
   /* deposit the property information into the element's description */
 
-  prop_ptr = find_property (elem, prop->name, &index);
+  prop_ptr = find_property (elem, (char*)prop->name, &index);
   if (prop_ptr == NULL) {
     fprintf (stderr, "Warning:  Can't find property '%s' in element '%s'\n",
              prop->name, elem_name);
@@ -1178,7 +1178,7 @@ PlyOtherElems *get_other_element_ply (PlyFile *plyfile)
   OtherElem *other;
 
   elem = plyfile->which_elem;
-  elem_name = elem->name;
+  elem_name = (char*)elem->name;
   elem_count = elem->num;
 
   /* create room for the new "other" element, initializing the */
@@ -1380,7 +1380,7 @@ PlyElement *find_element(PlyFile *plyfile, char *element)
   int i;
 
   for (i = 0; i < plyfile->num_elem_types; i++)
-    if (equal_strings (element, plyfile->elems[i]->name))
+    if (equal_strings (element, (char*)plyfile->elems[i]->name))
       return (plyfile->elems[i]);
 
   return (NULL);
@@ -1404,7 +1404,7 @@ PlyProperty *find_property(PlyElement *elem, char *prop_name, int *index)
   int i;
 
   for (i = 0; i < elem->nprops; i++)
-    if (equal_strings (prop_name, elem->props[i]->name)) {
+    if (equal_strings (prop_name, (char*)elem->props[i]->name)) {
       *index = i;
       return (elem->props[i]);
     }
@@ -2305,12 +2305,12 @@ int get_prop_type(char *type_name)
 
   /* try to match the type name */
   for (i = StartType + 1; i < EndType; i++)
-    if (equal_strings (type_name, type_names[i]))
+    if (equal_strings (type_name, (char*)type_names[i]))
       return (i);
 
   /* see if we can match an old type name */
   for (i = StartType + 1; i < EndType; i++)
-    if (equal_strings (type_name, old_type_names[i]))
+    if (equal_strings (type_name, (char*)old_type_names[i]))
       return (i);
 
   /* if we get here, we didn't find the type */
@@ -2338,13 +2338,13 @@ void add_property (PlyFile *plyfile, char **words, int nwords)
 
   prop = (PlyProperty *) myalloc (sizeof (PlyProperty));
 
-  if (equal_strings (words[1], "list")) {          /* list */
+  if (equal_strings (words[1], (char*)"list")) {          /* list */
     prop->count_external = get_prop_type (words[2]);
     prop->external_type = get_prop_type (words[3]);
     prop->name = strdup (words[4]);
     prop->is_list = PLY_LIST;
   }
-  else if (equal_strings (words[1], "string")) {   /* string */
+  else if (equal_strings (words[1], (char*)"string")) {   /* string */
     prop->count_external = Int8;
     prop->external_type = Int8;
     prop->name = strdup (words[2]);
@@ -2660,7 +2660,7 @@ Exit:
   returns pointer to the name of this next element
 ******************************************************************************/
 
-char *setup_element_read_ply (PlyFile *ply, int index, int *elem_count)
+const char *setup_element_read_ply (PlyFile *ply, int index, int *elem_count)
 {
   PlyElement *elem;
 
@@ -2722,7 +2722,7 @@ void setup_property_ply(
 
   /* deposit the property information into the element's description */
 
-  prop_ptr = find_property (elem, prop->name, &index);
+  prop_ptr = find_property (elem, (char*)prop->name, &index);
   if (prop_ptr == NULL) {
     fprintf (stderr, "Warning:  Can't find property '%s' in element '%s'\n",
              prop->name, elem->name);
@@ -2939,13 +2939,13 @@ typedef struct RuleName {
 } RuleName;
 
 RuleName rule_name_list[] = {
-  AVERAGE_RULE, "avg",
-  RANDOM_RULE, "rnd",
-  MINIMUM_RULE, "max",
-  MAXIMUM_RULE, "min",
-  MAJORITY_RULE, "major",
-  SAME_RULE, "same",
-  -1, "end_marker",
+  AVERAGE_RULE, (char*)"avg",
+  RANDOM_RULE, (char*)"rnd",
+  MINIMUM_RULE, (char*)"max",
+  MAXIMUM_RULE, (char*)"min",
+  MAJORITY_RULE, (char*)"major",
+  SAME_RULE, (char*)"same",
+  -1, (char*)"end_marker",
 };
 
 
@@ -2995,13 +2995,13 @@ PlyPropRules *init_rule_ply (PlyFile *ply, char *elem_name)
 
   for (list = ply->rule_list; list != NULL; list = list->next) {
 
-    if (!equal_strings (list->element, elem->name))
+    if (!equal_strings (list->element, (char*)elem->name))
       continue;
 
     found_prop = 0;
 
     for (i = 0; i < elem->nprops; i++)
-      if (equal_strings (list->property, elem->props[i]->name)) {
+      if (equal_strings (list->property, (char*)elem->props[i]->name)) {
 
         found_prop = 1;
 
@@ -3041,7 +3041,7 @@ void modify_rule_ply (PlyPropRules *rules, char *prop_name, int rule_type)
   /* find the property and modify its rule type */
 
   for (i = 0; i < elem->nprops; i++)
-    if (equal_strings (elem->props[i]->name, prop_name)) {
+    if (equal_strings ((char*)elem->props[i]->name, prop_name)) {
       rules->rule_list[i] = rule_type;
       return;
     }

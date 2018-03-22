@@ -1,5 +1,12 @@
 #pragma once
 
+#ifndef __CORNER_H__
+#define __CORNER_H__
+
+class Vertex;
+class Edge;
+class Triangle;
+
 class Corner {
 public:
 	int index;
@@ -13,3 +20,4 @@ public:
 		return (c->index == this->index) && (c->vertex == this->vertex);
 	}
 };
+#endif /* __CORNER_H__ */
