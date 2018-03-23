@@ -23,6 +23,6 @@ private:
 	MatrixXd energyMatrix(Surface* surface, VectorXd edge_lengths, MatrixXd omega, MatrixXd s);
 	MatrixXd massMatrix(Surface* surface, VectorXd edge_lengths);
 	VectorXd principleEigenvector(MatrixXd energy_matrix, MatrixXd mass_matrix);
-	void textureCoordinates(Surface* surface, Eigenvector, MatrixXd omega, MatrixXd s);
+	void textureCoordinates(Surface* surface, MatrixXd omega, MatrixXd s);
 };
 

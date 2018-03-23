@@ -55,15 +55,15 @@ MatrixXd StripeGenerator::massMatrix(Surface* surface, VectorXd edge_lengths)
 
 VectorXd StripeGenerator::principleEigenvector(MatrixXd energy_matrix, MatrixXd mass_matrix)
 {
-	Eigen::MatrixXd L(energy_matrix.llt().matrixL());
+	MatrixXd L(energy_matrix.llt().matrixL());
 
-	VectorXd x = VectorXd::Random(energy_matrix.size);
+	VectorXd x = VectorXd::Random(energy_matrix.size());
 
 	for (int iter = 0; iter < 20; iter++)
 	{
 		x = mass_matrix * x;
 		SimplicialLDLT<SparseMatrix<double>> cholesky;
-		cholesky.compute(L);
+		cholesky.compute(L.sparseView());
 		x = cholesky.solve(x);
 	}
 

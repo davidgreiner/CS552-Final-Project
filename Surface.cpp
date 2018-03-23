@@ -44,12 +44,12 @@ Surface::Surface(FILE *file)
 				offsetof(Vertex_io, other_props));
 
 			/* grab all the vertex elements */
-			for (j = 0; j < vertices.size(); j++) {
+			for (j = 0; j < max_verts; j++) {
 				Vertex_io vert;
 				get_element_ply(in_ply, (void *)&vert);
 
 				/* copy info from the "vert" structure */
-				vertices[j] = new Vertex(vert.x, vert.y, vert.z);
+				vertices.push_back(new Vertex(vert.x, vert.y, vert.z));
 				vertices[j]->other_props = vert.other_props;
 			}
 		}
@@ -74,7 +74,7 @@ Surface::Surface(FILE *file)
 				}
 
 				/* copy info from the "face" structure */
-				triangles[j] = new Triangle;
+				triangles.push_back(new Triangle);
 				triangles[j]->nverts = 3;
 				triangles[j]->verts[0] = (Vertex *)face.verts[0];
 				triangles[j]->verts[1] = (Vertex *)face.verts[1];
@@ -224,9 +224,9 @@ void Surface::create_edge(Vertex *v1, Vertex *v2)
 
 	/* create the edge */
 
-	edges[edges.size()] = new Edge;
-	Edge *e = edges[edges.size()];
-	e->index = edges.size();
+	edges.push_back(new Edge);
+	Edge *e = edges[edges.size() - 1];
+	e->index = edges.size() - 1;
 	e->verts[0] = v1;
 	e->verts[1] = v2;
 	e->middle = NULL;
@@ -788,7 +788,7 @@ void Surface::calc_corner_table()
 			Vertex* v0 = triangles[i]->verts[k];
 			Vertex* v1 = triangles[i]->verts[(k + 1) % 3];
 			Vertex* v2 = triangles[i]->verts[(k + 2) % 3];
-			corners[ncorners] = new Corner;
+			corners.push_back(new Corner);
 			corners[ncorners]->index = ncorners;
 			corners[ncorners]->triangle = triangles[i];
 			corners[ncorners]->vertex = triangles[i]->verts[k];

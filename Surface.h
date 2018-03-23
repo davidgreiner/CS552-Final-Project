@@ -41,7 +41,7 @@ private:
 
 	int max_tris;
 
-
+	int orientation;
 	int max_verts;
 
 	int max_edges;
